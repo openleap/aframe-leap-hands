@@ -1,4 +1,4 @@
-# aframe-leap-controls-component
+# aframe-leap-controls
 
 *(In Progress)* A-Frame VR component for Leap Motion controller.
 
