@@ -1,0 +1,40 @@
+{
+  "name": "aframe-leap-motion-controls",
+  "version": "0.0.1",
+  "description": "Leap Motion components for A-Frame VR",
+  "main": "index.js",
+  "scripts": {
+    "dev": "budo browser.js:examples/aframe-leap-motion-controls.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/donmccurdy/aframe-leap-motion-controls.git"
+  },
+  "keywords": [
+    "aframe",
+    "aframevr",
+    "leap",
+    "leapmotion",
+    "vr",
+    "hand"
+  ],
+  "author": "Don McCurdy <dm@donmccurdy.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/donmccurdy/aframe-leap-motion-controls/issues"
+  },
+  "homepage": "https://github.com/donmccurdy/aframe-leap-motion-controls#readme",
+  "dependencies": {
+    "leapjs": "^0.6.4",
+    "leapjs-plugins": "^0.1.11"
+  },
+  "devDependencies": {
+    "aframe-extras": "^1.15.1",
+    "browserify": "^13.0.1",
+    "budo": "^8.2.2"
+  },
+  "peerDependencies": {
+    "aframe": "^0.2.0"
+  }
+}
