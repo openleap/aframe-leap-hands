@@ -1,6 +1,6 @@
 module.exports = {
-  'box-hand': require('./src/box-hand'),
+  'bone-hand': require('./src/bone-hand'),
   registerAll: function () {
-    if (!AFRAME.components['box-hand']) AFRAME.registerComponent('box-hand', this['box-hand']);
+    if (!AFRAME.components['bone-hand']) AFRAME.registerComponent('bone-hand', this['bone-hand']);
   }
 };

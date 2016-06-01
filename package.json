@@ -4,7 +4,7 @@
   "description": "Leap Motion components for A-Frame VR",
   "main": "index.js",
   "scripts": {
-    "dev": "budo browser.js:examples/aframe-leap-motion-controls.js",
+    "dev": "budo browser.js:examples/aframe-leap-motion-controls.js --port 8000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
