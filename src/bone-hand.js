@@ -31,8 +31,11 @@ module.exports = {
 
   init: function () {
     this.controller = controller;
-    this.isVisible = false;
+
     this.hand = HandMesh.get();
+    this.hand.hide();
+    this.isVisible = false;
+
     this.mesh = this.hand.getMesh();
     this.el.setObject3D('mesh', this.mesh);
   },
