@@ -26,8 +26,7 @@
   },
   "homepage": "https://github.com/donmccurdy/aframe-leap-motion-controls#readme",
   "dependencies": {
-    "leapjs": "^0.6.4",
-    "leapjs-plugins": "^0.1.11"
+    "leapjs": "^0.6.4"
   },
   "devDependencies": {
     "aframe-extras": "^1.15.1",
