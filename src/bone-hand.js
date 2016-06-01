@@ -30,8 +30,8 @@ module.exports = {
   },
 
   init: function () {
-    console.info('[box-hand] init()');
     this.controller = controller;
+    this.isVisible = false;
     this.hand = HandMesh.get();
     this.mesh = this.hand.getMesh();
     this.el.setObject3D('mesh', this.mesh);
@@ -55,6 +55,13 @@ module.exports = {
       this.hand.scaleTo(hand);
       this.hand.formTo(hand);
     }
+
+    if (hand && !this.isVisible) {
+      this.hand.show();
+    } else if (!hand && this.isVisible) {
+      this.hand.hide();
+    }
+    this.isVisible = !!hand;
   }
 
 };
