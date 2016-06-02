@@ -22,7 +22,7 @@ module.exports = {
   init: function () {
     this.controller = controller;
 
-    this.hand = HandMesh.get();
+    this.hand = new HandMesh();
     this.hand.hide();
     this.isVisible = false;
 
@@ -31,7 +31,7 @@ module.exports = {
   },
 
   remove: function () {
-    if (this.hand) this.hand.replace();
+    if (this.hand) delete this.hand;
     if (this.mesh) this.el.removeObject3D('mesh');
   },
 
