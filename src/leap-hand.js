@@ -1,26 +1,16 @@
-var Leap = require('leapjs'),
-    HandMesh = require('../lib/leap.hand-mesh'),
-    transform = require('../lib/leap.transform.js');
+var HandMesh = require('../lib/leap.hand-mesh');
 
-Leap.Controller.plugin('transform', transform);
 
-Leap.plugin('boneHands', function(options) {
-  options = options || {};
-  this.use('transform', {vr: true});
-  return {hand: function () {}};
-});
-
-var controller = Leap.loop()
-  .setOptimizeHMD(true)
-  .use('boneHands');
-
+/**
+ * A-Frame component for a single Leap Motion hand.
+ */
 module.exports = {
   schema: {
     hand: {default: '', oneOf: ['left', 'right'], required: true}
   },
 
   init: function () {
-    this.controller = controller;
+    this.system = this.el.sceneEl.systems.leap;
 
     this.hand = new HandMesh();
     this.hand.hide();
@@ -38,7 +28,7 @@ module.exports = {
   tick: function () {
     var hand,
         data = this.data,
-        frame = this.controller.frame();
+        frame = this.system.frame();
 
     if (frame.hands.length) {
       hand = frame.hands[frame.hands[0].type === data.hand ? 0 : 1];

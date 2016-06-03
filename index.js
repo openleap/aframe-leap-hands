@@ -1,6 +1,8 @@
 module.exports = {
-  'bone-hand': require('./src/bone-hand'),
+  'system': require('./src/leap-system'),
+  'leap-hand': require('./src/leap-hand'),
   registerAll: function () {
-    if (!AFRAME.components['bone-hand']) AFRAME.registerComponent('bone-hand', this['bone-hand']);
+    AFRAME.registerSystem('leap', this.system);
+    AFRAME.registerComponent('leap-hand', this['leap-hand']);
   }
 };
