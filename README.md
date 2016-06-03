@@ -15,11 +15,4 @@
 
 ### Third-party
 
-+ [THREE.LeapMotion Wrapper](https://community.leapmotion.com/t/three-js-wrapper/769) [GitHub](https://github.com/scottbyrns/THREE.LeapMotion)
-
-### PeerJS
-
-May be unnecessary - it looks like LeapJS can read from a WebSocket?
-
-+ [PeerJS](https://github.com/peers/peerjs)
-+ [PeerJS Server](https://github.com/peers/peerjs-server)
++ THREE.LeapMotion Wrapper [discussion](https://community.leapmotion.com/t/three-js-wrapper/769) and [GitHub](https://github.com/scottbyrns/THREE.LeapMotion)
