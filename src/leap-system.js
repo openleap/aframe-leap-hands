@@ -18,7 +18,7 @@ module.exports = {
       .use('aframeSystem');
   },
 
-  frame: function () {
+  getFrame: function () {
     return this.controller.frame();
   }
 };

@@ -12,36 +12,40 @@ module.exports = {
   init: function () {
     this.system = this.el.sceneEl.systems.leap;
 
-    this.hand = new HandMesh();
-    this.hand.hide();
-    this.isVisible = false;
+    /** @type {Leap.Hand} */
+    this.hand = null;
 
-    this.mesh = this.hand.getMesh();
-    this.el.setObject3D('mesh', this.mesh);
+    /** @type {Leap.HandMesh} */
+    this.handMesh = new HandMesh();
+
+    this.el.setObject3D('mesh', this.handMesh.getMesh());
+    this.handMesh.hide();
+    this.isVisible = false;
   },
 
   remove: function () {
-    if (this.hand) delete this.hand;
-    if (this.mesh) this.el.removeObject3D('mesh');
+    if (this.handMesh) {
+      this.el.removeObject3D('mesh');
+      delete this.handMesh;
+    }
   },
 
   tick: function () {
-    var hand,
-        data = this.data,
-        frame = this.system.frame();
-
-    if (frame.hands.length) {
-      hand = frame.hands[frame.hands[0].type === data.hand ? 0 : 1];
-    }
+    var hand = this.getHand();
 
     if (hand) {
-      this.hand.scaleTo(hand);
-      this.hand.formTo(hand);
+      this.handMesh.scaleTo(hand);
+      this.handMesh.formTo(hand);
     }
 
-    if ( hand && !this.isVisible) this.hand.show();
-    if (!hand &&  this.isVisible) this.hand.hide();
+    if ( hand && !this.isVisible) this.handMesh.show();
+    if (!hand &&  this.isVisible) this.handMesh.hide();
     this.isVisible = !!hand;
-  }
+  },
 
+  getHand: function () {
+    var data = this.data,
+        frame = this.system.getFrame();
+    return frame.hands.length ? frame.hands[frame.hands[0].type === data.hand ? 0 : 1] : null;
+  }
 };

@@ -2,6 +2,7 @@
   "globals": {
     "THREE": false,
     "AFRAME": false,
+    "CANNON": false,
     "window": false,
     "document": false,
     "require": false,
