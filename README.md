@@ -2,6 +2,8 @@
 
 *(In Progress)* A-Frame VR component for Leap Motion controller.
 
+![screenshot](https://dl.dropboxusercontent.com/u/42869844/tmp/leaphands.JPG)
+
 ## Installation
 
 Using NPM and Browserify or Webpack:
