@@ -1,5 +1,5 @@
 {
-  "name": "aframe-leap-motion-controls",
+  "name": "aframe-leap-hands",
   "version": "0.0.1",
   "description": "Leap Motion components for A-Frame VR",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/donmccurdy/aframe-leap-motion-controls.git"
+    "url": "git+https://github.com/donmccurdy/aframe-leap-hands.git"
   },
   "keywords": [
     "aframe",
@@ -22,9 +22,9 @@
   "author": "Don McCurdy <dm@donmccurdy.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/donmccurdy/aframe-leap-motion-controls/issues"
+    "url": "https://github.com/donmccurdy/aframe-leap-hands/issues"
   },
-  "homepage": "https://github.com/donmccurdy/aframe-leap-motion-controls#readme",
+  "homepage": "https://github.com/donmccurdy/aframe-leap-hands#readme",
   "dependencies": {
     "leapjs": "^0.6.4"
   },
