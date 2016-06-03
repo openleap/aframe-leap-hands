@@ -1,4 +1,4 @@
-# Leap Motion `leap-hand` Components for A-Frame VR
+# A-Frame VR `leap-hand` for Leap Motion
 
 *(In Progress)* A-Frame VR component for Leap Motion controller.
 
