@@ -29,7 +29,8 @@
     "leapjs": "^0.6.4"
   },
   "devDependencies": {
-    "aframe-extras": "^1.15.1",
+    "aframe": "aframevr/aframe",
+    "aframe-extras": "^1.16.2",
     "browserify": "^13.0.1",
     "budo": "^8.2.2"
   },

@@ -4,14 +4,12 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no,maximum-scale=1">
     <title>Examples • Leap Hands</title>
-    <script src="https://aframe.io/releases/0.2.0/aframe.js"></script>
-    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v1.15.1/dist/aframe-extras.min.js"></script>
     <script src="../budo.js"></script>
   </head>
   <body>
     <a-scene>
       <!-- Player -->
-      <a-entity camera="near: 0.01" universal-controls position="0 1.764 0">
+      <a-entity camera="near: 0.01" look-controls position="0 1.5 0">
         <a-entity leap-hand="hand: left"></a-entity>
         <a-entity leap-hand="hand: right"></a-entity>
       </a-entity>
