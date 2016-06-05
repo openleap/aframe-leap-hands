@@ -9,17 +9,18 @@
   <body>
     <a-scene>
       <!-- Player -->
-      <a-entity camera="near: 0.01" look-controls position="0 1.5 0">
+      <a-entity camera="near: 0.01" look-controls>
         <a-entity leap-hand="hand: left" leap-hand-body></a-entity>
         <a-entity leap-hand="hand: right" leap-hand-body></a-entity>
       </a-entity>
 
-      <a-box width="0.5" height="0.5" depth="0.5" position="-0.25 0.25 -0.5" color="red" dynamic-body></a-box>
-      <a-box width="0.5" height="0.5" depth="0.5" position="0.00 0.75 -0.5" color="green" dynamic-body></a-box>
-      <a-box width="0.5" height="0.5" depth="0.5" position="0.25 0.25 -0.5" color="blue" dynamic-body></a-box>
+      <a-box width="0.5" height="0.5" depth="0.5" position="-0.25 0.25 -0.5" color="red" dynamic-body="shape: box"></a-box>
+      <a-box width="0.5" height="0.5" depth="0.5" position="0.00 0.75 -0.5" color="green" dynamic-body="shape: box"></a-box>
+      <a-box width="0.5" height="0.5" depth="0.5" position="0.25 0.25 -0.5" color="blue" dynamic-body="shape: box"></a-box>
 
       <!-- Terrain -->
-      <a-grid static-body src="url(https://cdn.rawgit.com/donmccurdy/aframe-extras/v1.15.1/assets/grid.png)"></a-grid>
+      <a-grid src="url(https://cdn.rawgit.com/donmccurdy/aframe-extras/v1.15.1/assets/grid.png)"></a-grid>
+      <a-box width="75" height="0.1" depth="75" static-body="shape: box" opacity="0"></a-box>
 
       <!-- Lighting -->
       <a-light type="ambient" color="#ccc"></a-light>
