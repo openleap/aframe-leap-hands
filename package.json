@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/donmccurdy/aframe-leap-hands#readme",
   "dependencies": {
+    "circular-array": "0.0.1",
     "leapjs": "^0.6.4"
   },
   "devDependencies": {
