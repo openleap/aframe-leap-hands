@@ -11,8 +11,6 @@ module.exports = {
 
     /** @type {{string: CANNON.Body}} */
     this.fingerBodies = {};
-
-    this.el.addEventListener('leap-pinchstart', this.onPinchstart.bind(this));
   },
 
   remove: function () {
@@ -62,19 +60,5 @@ module.exports = {
       body.position.copy(vthree);
       body.shapes[0].radius = finger.distal.length / 2;
     };
-  }()),
-
-  onPinchstart: function (e) {
-    var body = this.fingerBodies[e.detail.hand.indexFinger.id];
-
-    if (!body) return;
-
-    for (var i = 0, contact; (contact = this.physics.world.contacts[i]); i++) {
-      if (body.id === contact.bi.id && contact.bj.el) {
-        contact.bj.el.emit(e.type, e.detail);
-      } else if (body.id === contact.bj.id) {
-        contact.bi.el.emit(e.type, e.detail);
-      }
-    }
-  }
+  }())
 };

@@ -6,8 +6,11 @@ var HandMesh = require('../lib/leap.hand-mesh'),
  */
 module.exports = {
   schema: {
-    hand: {default: '', oneOf: ['left', 'right'], required: true},
-    debounce: {default: 100}
+    hand:            {default: '', oneOf: ['left', 'right'], required: true},
+    holdSelector:    {default: '[holdable]'},
+    holdSensitivity: {default: 0.95}, // [0,1]
+    holdDistance:    {default: 0.2}, // m
+    holdDebounce:    {default: 100} // ms
   },
 
   init: function () {
@@ -16,15 +19,23 @@ module.exports = {
     this.hand = /** @type {Leap.Hand} */ null;
     this.handMesh = /** @type {Leap.HandMesh} */ new HandMesh();
 
-    this.isGrabbing = /** @type {boolean} */ false;
-    this.isPinching = /** @type {boolean} */ false;
-    var bufferLen = Math.floor(this.data.debounce / (1000 / 120));
+    this.isVisible = false;
+    this.isHolding = false;
+
+    var bufferLen = Math.floor(this.data.holdDebounce / (1000 / 120));
+    this.grabStrength = 0;
+    this.pinchStrength = 0;
     this.grabStrengthBuffer = /** @type {CircularArray<number>} */ new CircularArray(bufferLen);
     this.pinchStrengthBuffer = /** @type {CircularArray<number>} */ new CircularArray(bufferLen);
 
+    this.raycaster = new THREE.Raycaster(
+      new THREE.Vector3(), new THREE.Vector3(), 0, this.data.holdDistance
+    );
+
+    this.holdTarget = /** @type {AFRAME.Element} */ null;
+
     this.el.setObject3D('mesh', this.handMesh.getMesh());
     this.handMesh.hide();
-    this.isVisible = false;
   },
 
   remove: function () {
@@ -57,19 +68,63 @@ module.exports = {
   },
 
   updateEvents: function (hand) {
-    var isGrabbing = Math.min.apply(Math, this.grabStrengthBuffer.array()) > 0.8,
-        isPinching = !isGrabbing && Math.min.apply(Math, this.pinchStrengthBuffer.array()) > 0.8;
+    var isHolding, objects, results;
 
-    if (this.isGrabbing !== isGrabbing) {
-      this.isGrabbing = isGrabbing;
-      this.el.emit(isGrabbing ? 'leap-grabstart' :'leap-grabend', {hand: hand});
-      // console.log(isGrabbing ? 'leap-grabstart' : 'leap-grabend');
+    this.grabStrength = circularArrayAvg(this.grabStrengthBuffer);
+    this.pinchStrength = circularArrayAvg(this.pinchStrengthBuffer);
+
+    isHolding = Math.max(this.grabStrength, this.pinchStrength) > this.data.holdSensitivity;
+
+    if (this.isHolding === isHolding) return;
+    this.isHolding = isHolding;
+
+    if (!this.isHolding) {
+      if (this.holdTarget) {
+        this.el.emit('leap-holdstop', {hand: hand});
+        this.holdTarget.emit('leap-holdstop', {hand: hand});
+        this.holdTarget = null;
+      }
+      return;
     }
 
-    if (this.isPinching !== isPinching) {
-      this.isPinching = isPinching;
-      this.el.emit(isPinching ? 'leap-pinchstart' :'leap-pinchend', {hand: hand});
-      // console.log(isPinching ? 'leap-pinchstart' : 'leap-pinchend');
+    this.raycaster.ray.direction.set(hand.palmNormal[0], hand.palmNormal[1], hand.palmNormal[2]);
+    if (this.pinchStrength < this.grabStrength) {
+      this.raycaster.ray.direction.x += hand.direction[0];
+      this.raycaster.ray.direction.y += hand.direction[1];
+      this.raycaster.ray.direction.z += hand.direction[2];
+      this.raycaster.ray.direction.normalize();
+    }
+    this.raycaster.ray.origin.set(
+      hand.palmPosition[0],
+      hand.palmPosition[1],
+      hand.palmPosition[2]
+    );
+    this.el.object3D.localToWorld(this.raycaster.ray.origin);
+    objects = [].slice.call(this.el.sceneEl.querySelectorAll(this.data.holdSelector))
+      .map(function (el) { return el.object3D; });
+    results = this.raycaster.intersectObjects(objects, true);
+
+    if (!results.length) return;
+
+    this.el.emit('leap-holdstart', {
+      hand: hand,
+      body: this.el.components['leap-hand-body'].fingerBodies[hand.indexFinger.id]
+    });
+    this.holdTarget = results[0].object.el;
+    if (this.holdTarget) {
+      this.holdTarget.emit('leap-holdstart', {
+        hand: hand,
+        body: this.el.components['leap-hand-body'].fingerBodies[hand.indexFinger.id]
+      });
     }
   }
 };
+
+function circularArrayAvg (array) {
+  var avg = 0;
+  array = array.array();
+  for (var i = 0; i < array.length; i++) {
+    avg += array[i];
+  }
+  return avg / array.length;
+}
