@@ -108,13 +108,13 @@ module.exports = {
 
     this.el.emit('leap-holdstart', {
       hand: hand,
-      body: this.el.components['leap-hand-body'].fingerBodies[hand.indexFinger.id]
+      body: this.el.components['leap-hand-body'].fingerBodies[hand.indexFinger.type]
     });
     this.holdTarget = results[0].object.el;
     if (this.holdTarget) {
       this.holdTarget.emit('leap-holdstart', {
         hand: hand,
-        body: this.el.components['leap-hand-body'].fingerBodies[hand.indexFinger.id]
+        body: this.el.components['leap-hand-body'].fingerBodies[hand.indexFinger.type]
       });
     }
   }

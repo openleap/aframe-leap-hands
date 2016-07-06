@@ -31,7 +31,7 @@ module.exports = {
     for (var i = 0; i < hand.fingers.length; i++) {
       finger = hand.fingers[i];
       if (finger.valid) {
-        body = this.fingerBodies[finger.id] || this.createFingerBody(finger);
+        body = this.fingerBodies[finger.type] || this.createFingerBody(finger);
         this.syncFingerBody(finger, body);
       }
     }
@@ -46,7 +46,7 @@ module.exports = {
     });
     body.el = this.el;
     this.physics.addBody(body);
-    this.fingerBodies[finger.id] = body;
+    this.fingerBodies[finger.type] = body;
     return body;
   },
 
