@@ -30,25 +30,22 @@ AFRAME.registerComponent('holdable', {
     </script>
   </head>
   <body>
-    <a-scene physics="debug: true">
+    <a-scene>
       <!-- Player -->
-      <a-entity camera="near: 0.01" position="0 0.5 0" look-controls>
+      <a-entity camera="near: 0.01" position="0 0 0" look-controls>
         <a-entity leap-hand="hand: left" leap-hand-body></a-entity>
         <a-entity leap-hand="hand: right" leap-hand-body></a-entity>
       </a-entity>
 
-      <a-box width="0.25" height="0.25" depth="0.25" position="-0.25 0.25 -0.5" color="red"
-             holdable dynamic-body="shape: box"
-             sound="src: https://aframe.io/aframe/examples/_sounds/321103__nsstudios__blip1.wav; on: leap-holdstart;"></a-box>
-      <a-box width="0.25" height="0.25" depth="0.25" position="0.00 0.75 -0.5" color="green"
-             holdable dynamic-body="shape: box"
-             sound="src: https://aframe.io/aframe/examples/_sounds/321104__nsstudios__blip2.wav; on: leap-holdstart;"></a-box>
-      <a-box width="0.25" height="0.25" depth="0.25" position="0.25 0.25 -0.5" color="blue"
-             holdable dynamic-body="shape: box"
-             sound="src: https://aframe.io/aframe/examples/_sounds/321104__nsstudios__blip2.wav; on: leap-holdstart;"></a-box>
+      <a-box width="0.25" height="0.25" depth="0.25" position="-0.125 0.13 -0.5" color="red"
+             holdable dynamic-body="shape: box"></a-box>
+      <a-box width="0.25" height="0.25" depth="0.25" position="0.00 0.4 -0.5" color="green"
+             holdable dynamic-body="shape: box"></a-box>
+      <a-box width="0.25" height="0.25" depth="0.25" position="0.125 0.13 -0.5" color="blue"
+             holdable dynamic-body="shape: box"></a-box>
 
       <!-- Terrain -->
-      <a-grid src="url(https://cdn.rawgit.com/donmccurdy/aframe-extras/v1.15.1/assets/grid.png)"></a-grid>
+      <a-grid></a-grid>
       <a-box width="75" height="0.1" depth="75" static-body="shape: box" opacity="0"></a-box>
 
       <!-- Lighting -->
