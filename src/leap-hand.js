@@ -1,5 +1,6 @@
 var HandMesh = require('../lib/leap.hand-mesh'),
-    CircularArray = require('circular-array');
+    CircularArray = require('circular-array'),
+    Intersector = require('./intersector');
 
 /**
  * A-Frame component for a single Leap Motion hand.
@@ -10,7 +11,8 @@ module.exports = {
     holdSelector:    {default: '[holdable]'},
     holdSensitivity: {default: 0.95}, // [0,1]
     holdDistance:    {default: 0.2}, // m
-    holdDebounce:    {default: 100} // ms
+    holdDebounce:    {default: 100}, // ms
+    debug:           {default: true} // TODO
   },
 
   init: function () {
@@ -28,14 +30,15 @@ module.exports = {
     this.grabStrengthBuffer = /** @type {CircularArray<number>} */ new CircularArray(bufferLen);
     this.pinchStrengthBuffer = /** @type {CircularArray<number>} */ new CircularArray(bufferLen);
 
-    this.raycaster = new THREE.Raycaster(
-      new THREE.Vector3(), new THREE.Vector3(), 0, this.data.holdDistance
-    );
-
+    this.intersector = new Intersector();
     this.holdTarget = /** @type {AFRAME.Element} */ null;
 
     this.el.setObject3D('mesh', this.handMesh.getMesh());
     this.handMesh.hide();
+
+    if (this.data.debug) {
+      this.el.object3D.add(this.intersector.getMesh());
+    }
   },
 
   remove: function () {
@@ -43,6 +46,10 @@ module.exports = {
       this.el.removeObject3D('mesh');
       delete this.handMesh;
     }
+    if (this.intersector.getMesh()) {
+      this.el.object3D.remove(this.intersector.getMesh());
+    }
+    delete this.intersector;
   },
 
   tick: function () {
@@ -53,7 +60,12 @@ module.exports = {
       this.handMesh.formTo(hand);
       this.grabStrengthBuffer.push(hand.grabStrength);
       this.pinchStrengthBuffer.push(hand.pinchStrength);
-      this.updateEvents(hand);
+      this.grabStrength = circularArrayAvg(this.grabStrengthBuffer);
+      this.pinchStrength = circularArrayAvg(this.pinchStrengthBuffer);
+      var isHolding = Math.max(this.grabStrength, this.pinchStrength) > this.data.holdSensitivity;
+      this.intersector.update(this.data, this.el.object3D, hand, isHolding);
+      if (isHolding !== this.isHolding) this.updateEvents(hand, isHolding);
+      this.isHolding = isHolding;
     }
 
     if ( hand && !this.isVisible) this.handMesh.show();
@@ -67,18 +79,10 @@ module.exports = {
     return frame.hands.length ? frame.hands[frame.hands[0].type === data.hand ? 0 : 1] : null;
   },
 
-  updateEvents: function (hand) {
-    var isHolding, objects, results;
+  updateEvents: function (hand, isHolding) {
+    var objects, results;
 
-    this.grabStrength = circularArrayAvg(this.grabStrengthBuffer);
-    this.pinchStrength = circularArrayAvg(this.pinchStrengthBuffer);
-
-    isHolding = Math.max(this.grabStrength, this.pinchStrength) > this.data.holdSensitivity;
-
-    if (this.isHolding === isHolding) return;
-    this.isHolding = isHolding;
-
-    if (!this.isHolding) {
+    if (!isHolding) {
       if (this.holdTarget) {
         this.el.emit('leap-holdstop', {hand: hand});
         this.holdTarget.emit('leap-holdstop', {hand: hand});
@@ -87,34 +91,21 @@ module.exports = {
       return;
     }
 
-    this.raycaster.ray.direction.set(hand.palmNormal[0], hand.palmNormal[1], hand.palmNormal[2]);
-    if (this.pinchStrength < this.grabStrength) {
-      this.raycaster.ray.direction.x += hand.direction[0];
-      this.raycaster.ray.direction.y += hand.direction[1];
-      this.raycaster.ray.direction.z += hand.direction[2];
-      this.raycaster.ray.direction.normalize();
-    }
-    this.raycaster.ray.origin.set(
-      hand.palmPosition[0],
-      hand.palmPosition[1],
-      hand.palmPosition[2]
-    );
-    this.el.object3D.localToWorld(this.raycaster.ray.origin);
     objects = [].slice.call(this.el.sceneEl.querySelectorAll(this.data.holdSelector))
       .map(function (el) { return el.object3D; });
-    results = this.raycaster.intersectObjects(objects, true);
+    results = this.intersector.intersectObjects(objects, true);
 
     if (!results.length) return;
 
     this.el.emit('leap-holdstart', {
       hand: hand,
-      body: this.el.components['leap-hand-body'].fingerBodies[hand.indexFinger.type]
+      body: this.el.components['leap-hand-body'].palmBody
     });
     this.holdTarget = results[0].object.el;
     if (this.holdTarget) {
       this.holdTarget.emit('leap-holdstart', {
         hand: hand,
-        body: this.el.components['leap-hand-body'].fingerBodies[hand.indexFinger.type]
+        body: this.el.components['leap-hand-body'].palmBody
       });
     }
   }
