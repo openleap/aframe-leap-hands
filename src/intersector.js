@@ -15,12 +15,12 @@ Intersector.prototype.update = function (options, object3D, hand, isHolding) {
   this.debug = true; // TODO
 
   // Update raycaster.
-  this.raycaster.ray.direction.set(hand.palmNormal[0], hand.palmNormal[1], hand.palmNormal[2]);
+  this.raycaster.ray.direction.fromArray(hand.palmNormal);
   this.raycaster.ray.direction.x += hand.direction[0] / 2;
   this.raycaster.ray.direction.y += hand.direction[1] / 2;
   this.raycaster.ray.direction.z += hand.direction[2] / 2;
   this.raycaster.ray.direction.normalize();
-  this.raycaster.ray.origin.set(hand.palmPosition[0], hand.palmPosition[1], hand.palmPosition[2]);
+  this.raycaster.ray.origin.fromArray(hand.palmPosition);
   object3D.localToWorld(this.raycaster.ray.origin);
 
   // Update arrow helper.

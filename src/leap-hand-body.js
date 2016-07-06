@@ -53,13 +53,11 @@ module.exports = {
   },
 
   syncFingerBody: (function () {
-    var vthree = new THREE.Vector3();
+    var position = new THREE.Vector3();
 
     return function (finger, body) {
-      var position = finger.distal.center();
-      vthree.set(position[0], position[1], position[2]);
-      this.el.object3D.localToWorld(vthree);
-      body.position.copy(vthree);
+      this.el.object3D.localToWorld(position.fromArray(finger.distal.center()));
+      body.position.copy(position);
       body.shapes[0].radius = finger.distal.length / 2;
     };
   }()),
@@ -83,15 +81,12 @@ module.exports = {
         rotation = new THREE.Quaternion();
 
     return function (hand, body) {
-      normal.set(hand.palmNormal[0], hand.palmNormal[1], hand.palmNormal[2]);
-      this.el.object3D.localToWorld(normal);
+      this.el.object3D.localToWorld(normal.fromArray(hand.palmNormal));
       rotation.setFromUnitVectors(baseNormal, normal);
       body.quaternion.copy(rotation);
 
-      position.set(hand.palmPosition[0], hand.palmPosition[1], hand.palmPosition[2]);
-      this.el.object3D.localToWorld(position);
+      this.el.object3D.localToWorld(position.fromArray(hand.palmPosition));
       body.position.copy(position);
     };
-
   }())
 };
