@@ -2,6 +2,8 @@ var HandMesh = require('../lib/leap.hand-mesh'),
     CircularArray = require('circular-array'),
     Intersector = require('./intersector');
 
+var nextID = 1;
+
 /**
  * A-Frame component for a single Leap Motion hand.
  */
@@ -19,6 +21,7 @@ module.exports = {
   init: function () {
     this.system = this.el.sceneEl.systems.leap;
 
+    this.handID = nextID++;
     this.hand = /** @type {Leap.Hand} */ null;
     this.handMesh = /** @type {Leap.HandMesh} */ new HandMesh();
 
@@ -66,8 +69,10 @@ module.exports = {
       var isHolding = Math.max(this.grabStrength, this.pinchStrength)
         > (this.isHolding ? this.data.releaseSensitivity : this.data.holdSensitivity);
       this.intersector.update(this.data, this.el.object3D, hand, isHolding);
-      if (isHolding !== this.isHolding) this.updateEvents(hand, isHolding);
-      this.isHolding = isHolding;
+      if ( isHolding && !this.isHolding) this.hold(hand);
+      if (!isHolding &&  this.isHolding) this.release(hand);
+    } else if (this.isHolding) {
+      this.release(null);
     }
 
     if ( hand && !this.isVisible) this.handMesh.show();
@@ -81,35 +86,40 @@ module.exports = {
     return frame.hands.length ? frame.hands[frame.hands[0].type === data.hand ? 0 : 1] : null;
   },
 
-  updateEvents: function (hand, isHolding) {
-    var objects, results;
+  hold: function (hand) {
+    var objects, results,
+        eventDetail = this.getEventDetail(hand);
 
-    if (!isHolding) {
-      if (this.holdTarget) {
-        this.el.emit('leap-holdstop', {hand: hand});
-        this.holdTarget.emit('leap-holdstop', {hand: hand});
-        this.holdTarget = null;
-      }
-      return;
-    }
+    this.el.emit('leap-holdstart', eventDetail);
 
     objects = [].slice.call(this.el.sceneEl.querySelectorAll(this.data.holdSelector))
       .map(function (el) { return el.object3D; });
     results = this.intersector.intersectObjects(objects, true);
-
-    if (!results.length) return;
-
-    this.el.emit('leap-holdstart', {
-      hand: hand,
-      body: this.el.components['leap-hand-body'].palmBody
-    });
-    this.holdTarget = results[0].object.el;
+    this.holdTarget = results[0] && results[0].object && results[0].object.el;
     if (this.holdTarget) {
-      this.holdTarget.emit('leap-holdstart', {
-        hand: hand,
-        body: this.el.components['leap-hand-body'].palmBody
-      });
+      this.holdTarget.emit('leap-holdstart', eventDetail);
     }
+    this.isHolding = true;
+  },
+
+  release: function (hand) {
+    var eventDetail = this.getEventDetail(hand);
+
+    this.el.emit('leap-holdstop', eventDetail);
+
+    if (this.holdTarget) {
+      this.holdTarget.emit('leap-holdstop', eventDetail);
+      this.holdTarget = null;
+    }
+    this.isHolding = false;
+  },
+
+  getEventDetail: function (hand) {
+    return {
+      hand: hand,
+      handID: this.handID,
+      body: this.el.components['leap-hand-body'].palmBody
+    };
   }
 };
 
