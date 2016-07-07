@@ -7,12 +7,13 @@ var HandMesh = require('../lib/leap.hand-mesh'),
  */
 module.exports = {
   schema: {
-    hand:            {default: '', oneOf: ['left', 'right'], required: true},
-    holdSelector:    {default: '[holdable]'},
-    holdSensitivity: {default: 0.95}, // [0,1]
-    holdDistance:    {default: 0.2}, // m
-    holdDebounce:    {default: 100}, // ms
-    debug:           {default: true} // TODO
+    hand:               {default: '', oneOf: ['left', 'right'], required: true},
+    holdDistance:       {default: 0.2}, // m
+    holdDebounce:       {default: 100}, // ms
+    holdSelector:       {default: '[holdable]'},
+    holdSensitivity:    {default: 0.95}, // [0,1]
+    releaseSensitivity: {default: 0.75}, // [0,1]
+    debug:              {default: true}
   },
 
   init: function () {
@@ -62,7 +63,8 @@ module.exports = {
       this.pinchStrengthBuffer.push(hand.pinchStrength);
       this.grabStrength = circularArrayAvg(this.grabStrengthBuffer);
       this.pinchStrength = circularArrayAvg(this.pinchStrengthBuffer);
-      var isHolding = Math.max(this.grabStrength, this.pinchStrength) > this.data.holdSensitivity;
+      var isHolding = Math.max(this.grabStrength, this.pinchStrength)
+        > (this.isHolding ? this.data.releaseSensitivity : this.data.holdSensitivity);
       this.intersector.update(this.data, this.el.object3D, hand, isHolding);
       if (isHolding !== this.isHolding) this.updateEvents(hand, isHolding);
       this.isHolding = isHolding;

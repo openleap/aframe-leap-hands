@@ -4,17 +4,16 @@
  */
 function Intersector () {
   this.arrowHelper = this.createArrowHelper();
-  this.raycaster = new THREE.Raycaster(
-    new THREE.Vector3(), new THREE.Vector3(), 0, this.holdDistance
-  );
+  this.raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(), 0, 0.2);
 }
 
 Intersector.prototype.update = function (options, object3D, hand, isHolding) {
   // Update options.
   this.holdDistance = options.holdDistance;
-  this.debug = true; // TODO
+  this.debug = options.debug;
 
   // Update raycaster.
+  this.raycaster.far = this.holdDistance;
   this.raycaster.ray.direction.fromArray(hand.palmNormal);
   this.raycaster.ray.direction.x += hand.direction[0] / 2;
   this.raycaster.ray.direction.y += hand.direction[1] / 2;
