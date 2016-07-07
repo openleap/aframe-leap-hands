@@ -74,16 +74,24 @@ module.exports = {
     return body;
   },
 
+  /**
+   * Repositions and rotates the Body instance to match the Leap hand.
+   * TODO: There are some residual rotation issues here.
+   * @param {LEAP.Hand} hand
+   * @param {CANNON.Body} body
+   */
   syncPalmBody: (function () {
     var position = new THREE.Vector3(),
-        normal = new THREE.Vector3(),
-        baseNormal = new THREE.Vector3(0, -1, 0),
-        rotation = new THREE.Quaternion();
+        rotation = new THREE.Quaternion(),
+        hmdRotation = new THREE.Quaternion(),
+        euler = new THREE.Euler(),
+        _tmp1 = new THREE.Vector3(),
+        _tmp2 = new THREE.Vector3();
 
     return function (hand, body) {
-      this.el.object3D.localToWorld(normal.fromArray(hand.palmNormal));
-      rotation.setFromUnitVectors(baseNormal, normal);
-      body.quaternion.copy(rotation);
+      rotation.setFromEuler(euler.set(hand.pitch(), hand.yaw(), hand.roll()));
+      this.el.object3D.matrixWorld.decompose(_tmp1, hmdRotation, _tmp2);
+      body.quaternion.copy(hmdRotation.multiply(rotation));
 
       this.el.object3D.localToWorld(position.fromArray(hand.palmPosition));
       body.position.copy(position);
