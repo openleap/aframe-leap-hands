@@ -1,6 +1,7 @@
 var HandMesh = require('../lib/leap.hand-mesh'),
     CircularArray = require('circular-array'),
-    Intersector = require('./intersector');
+    Intersector = require('./helpers/intersector'),
+    HandBody = require('./helpers/hand-body');
 
 var nextID = 1;
 
@@ -10,6 +11,7 @@ var nextID = 1;
 module.exports = {
   schema: {
     hand:               {default: '', oneOf: ['left', 'right'], required: true},
+    enablePhysics:      {default: false},
     holdDistance:       {default: 0.2}, // m
     holdDebounce:       {default: 100}, // ms
     holdSelector:       {default: '[holdable]'},
@@ -23,7 +25,8 @@ module.exports = {
 
     this.handID = nextID++;
     this.hand = /** @type {Leap.Hand} */ null;
-    this.handMesh = /** @type {Leap.HandMesh} */ new HandMesh();
+    this.handBody = /** @type {HandBody} */ null;
+    this.handMesh = new HandMesh();
 
     this.isVisible = false;
     this.isHolding = false;
@@ -45,15 +48,29 @@ module.exports = {
     }
   },
 
+  update: function () {
+    var data = this.data;
+    if (data.enablePhysics && !this.handBody) {
+      this.handBody = new HandBody(this.el, this);
+    } else if (!data.enablePhysics && this.handBody) {
+      this.handBody.remove();
+      this.handBody = null;
+    }
+  },
+
   remove: function () {
     if (this.handMesh) {
       this.el.removeObject3D('mesh');
-      delete this.handMesh;
+      this.handMesh = null;
+    }
+    if (this.handBody) {
+      this.handBody.remove();
+      this.handBody = null;
     }
     if (this.intersector.getMesh()) {
       this.el.object3D.remove(this.intersector.getMesh());
+      this.intersector = null;
     }
-    delete this.intersector;
   },
 
   tick: function () {
@@ -118,7 +135,7 @@ module.exports = {
     return {
       hand: hand,
       handID: this.handID,
-      body: this.el.components['leap-hand-body'].palmBody
+      body: this.handBody ? this.handBody.palmBody : null
     };
   }
 };
