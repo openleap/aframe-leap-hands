@@ -15,7 +15,7 @@ module.exports = {
     holdSelector:       {default: '[holdable]'},
     holdSensitivity:    {default: 0.95}, // [0,1]
     releaseSensitivity: {default: 0.75}, // [0,1]
-    debug:              {default: true}
+    debug:              {default: false}
   },
 
   init: function () {
