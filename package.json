@@ -4,8 +4,11 @@
   "description": "Leap Motion components for A-Frame VR",
   "main": "index.js",
   "scripts": {
-    "dev": "budo browser.js:examples/budo.js --port 8000",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "budo examples/index.js:examples/budo.js --port 8000",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dist": "webpack browser.js dist/aframe-leap-hands.js && webpack -p browser.js dist/aframe-leap-hands.min.js",
+    "version": "npm run dist",
+    "postversion": "git push && git push --tags && npm publish"
   },
   "repository": {
     "type": "git",
@@ -33,7 +36,8 @@
     "aframe": "aframevr/aframe",
     "aframe-extras": "^1.16.2",
     "browserify": "^13.0.1",
-    "budo": "^8.2.2"
+    "budo": "^8.2.2",
+    "webpack": "^1.13.1"
   },
   "peerDependencies": {
     "aframe": "^0.2.0"
