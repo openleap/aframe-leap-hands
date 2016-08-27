@@ -7,7 +7,7 @@
     "dev": "budo examples/index.js:examples/budo.js --port 8000",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dist": "webpack browser.js dist/aframe-leap-hands.js && webpack -p browser.js dist/aframe-leap-hands.min.js",
-    "version": "npm run dist",
+    "version": "npm run dist && git add -A dist",
     "postversion": "git push && git push --tags && npm publish"
   },
   "repository": {
