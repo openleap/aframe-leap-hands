@@ -1,6 +1,6 @@
 {
   "name": "aframe-leap-hands",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Leap Motion components for A-Frame VR",
   "main": "index.js",
   "scripts": {
