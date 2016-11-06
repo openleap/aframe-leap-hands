@@ -1,7 +1,7 @@
 # A-Frame VR `leap-hand` for Leap Motion
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/donmccurdy/aframe-leap-hands/master/LICENSE)
-![Work in progress](https://img.shields.io/badge/status-work_in_progress-yellow.svg)
+![Work in progress](https://img.shields.io/badge/status-experimental-orange.svg)
 
 A-Frame VR component for Leap Motion controller.
 
