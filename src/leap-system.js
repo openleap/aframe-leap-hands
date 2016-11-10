@@ -12,9 +12,13 @@ Leap.plugin('aframeSystem', function(options) {
  * Leap Motion system for A-Frame.
  */
 module.exports = {
+  schema: {
+    hmd: {default: true}
+  },
+
   init: function () {
     this.controller = Leap.loop()
-      .setOptimizeHMD(true)
+      .setOptimizeHMD(this.data.hmd)
       .use('aframeSystem');
   },
 
