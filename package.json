@@ -33,13 +33,13 @@
     "leapjs": "^0.6.4"
   },
   "devDependencies": {
-    "aframe": "aframevr/aframe",
+    "aframe": "^0.3.2",
     "aframe-extras": "^1.16.2",
     "browserify": "^13.0.1",
     "budo": "^8.2.2",
     "webpack": "^1.13.1"
   },
   "peerDependencies": {
-    "aframe": "^0.2.0"
+    "aframe": "^0.3.2"
   }
 }
