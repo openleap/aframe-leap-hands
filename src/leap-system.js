@@ -3,14 +3,8 @@ var Leap = require('leapjs'),
 
 // Defaults from leap.transform.js.
 var DEFAULT_SCALE = 0.001;
-var DEFAULT_POSITION = new THREE.Vector3(0, 0, -0.08);
-var DEFAULT_QUATERNION = (new THREE.Quaternion())
-  .setFromRotationMatrix((new THREE.Matrix4()).set(
-    -1,  0,  0, 0,
-     0,  0, -1, 0,
-     0, -1,  0, 0,
-     0,  0,  0, 1
-   ));
+var DEFAULT_POSITION = new THREE.Vector3();
+var DEFAULT_QUATERNION = new THREE.Quaternion();
 
 Leap.Controller.plugin('transform', transform);
 
