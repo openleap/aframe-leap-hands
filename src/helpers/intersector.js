@@ -53,4 +53,16 @@ Intersector.prototype.getMesh = function () {
   return this.arrowHelper;
 };
 
+/** @return {Intersector} */
+Intersector.prototype.show = function () {
+  if (this.arrowHelper) this.arrowHelper.visible = true;
+  return this;
+};
+
+/** @return {Intersector} */
+Intersector.prototype.hide = function () {
+  if (this.arrowHelper) this.arrowHelper.visible = false;
+  return this;
+};
+
 module.exports = Intersector;
