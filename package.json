@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "aframe": "^0.3.2",
-    "aframe-extras": "^1.16.2",
+    "aframe-extras": "^2.7.3",
     "browserify": "^13.0.1",
     "budo": "^8.2.2",
     "webpack": "^1.13.1"
