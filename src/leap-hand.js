@@ -92,8 +92,19 @@ module.exports = {
       this.release(null);
     }
 
-    if ( hand && !this.isVisible) this.handMesh.show();
-    if (!hand &&  this.isVisible) this.handMesh.hide();
+    if (hand && !this.isVisible) {
+        this.handMesh.show();
+        if (this.intersector.getMesh()) {
+            this.el.object3D.add(this.intersector.getMesh());
+        }
+    }
+
+    if (!hand && this.isVisible) {
+        this.handMesh.hide();
+        if (this.intersector.getMesh()) {
+            this.el.object3D.remove(this.intersector.getMesh());
+        }
+    }
     this.isVisible = !!hand;
   },
 
