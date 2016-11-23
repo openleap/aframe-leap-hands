@@ -37,24 +37,26 @@ module.exports = {
     this.grabStrengthBuffer = /** @type {CircularArray<number>} */ new CircularArray(bufferLen);
     this.pinchStrengthBuffer = /** @type {CircularArray<number>} */ new CircularArray(bufferLen);
 
-    this.intersector = new Intersector();
+    // this.intersector = new Intersector();
     this.holdTarget = /** @type {AFRAME.Element} */ null;
 
     this.el.setObject3D('mesh', this.handMesh.getMesh());
     this.handMesh.hide();
 
-    if (this.data.debug) {
-      this.el.object3D.add(this.intersector.getMesh());
-    }
+    // if (this.data.debug) {
+    //   this.el.object3D.add(this.intersector.getMesh());
+    // }
   },
 
   update: function () {
     var data = this.data;
     if (data.enablePhysics && !this.handBody) {
       this.handBody = new HandBody(this.el, this);
+      this.el.body = this.handBody.palmBody;
     } else if (!data.enablePhysics && this.handBody) {
       this.handBody.remove();
       this.handBody = null;
+      this.el.body = null;
     }
   },
 
@@ -66,11 +68,12 @@ module.exports = {
     if (this.handBody) {
       this.handBody.remove();
       this.handBody = null;
+      this.el.body = null;
     }
-    if (this.intersector.getMesh()) {
-      this.el.object3D.remove(this.intersector.getMesh());
-      this.intersector = null;
-    }
+    // if (this.intersector.getMesh()) {
+    //   this.el.object3D.remove(this.intersector.getMesh());
+    //   this.intersector = null;
+    // }
   },
 
   tick: function () {
@@ -85,21 +88,26 @@ module.exports = {
       this.pinchStrength = circularArrayAvg(this.pinchStrengthBuffer);
       var isHolding = Math.max(this.grabStrength, this.pinchStrength)
         > (this.isHolding ? this.data.releaseSensitivity : this.data.holdSensitivity);
-      this.intersector.update(this.data, this.el.object3D, hand, isHolding);
+      // this.intersector.update(this.data, this.el.object3D, hand, isHolding);
       if ( isHolding && !this.isHolding) this.hold(hand);
       if (!isHolding &&  this.isHolding) this.release(hand);
     } else if (this.isHolding) {
       this.release(null);
     }
 
+    if (!this.el.body && this.handBody.palmBody) {
+      this.el.body = this.handBody.palmBody;
+      this.el.emit('body-loaded', {body: this.el.body});
+    }
+
     if (hand && !this.isVisible) {
       this.handMesh.show();
-      this.intersector.show();
+      // this.intersector.show();
     }
 
     if (!hand && this.isVisible) {
       this.handMesh.hide();
-      this.intersector.hide();
+      // this.intersector.hide();
     }
     this.isVisible = !!hand;
   },
@@ -111,35 +119,18 @@ module.exports = {
   },
 
   hold: function (hand) {
-    var objects, results,
-        eventDetail = this.getEventDetail(hand);
-
-    this.el.emit('leap-holdstart', eventDetail);
-
-    objects = [].slice.call(this.el.sceneEl.querySelectorAll(this.data.holdSelector))
-      .map(function (el) { return el.object3D; });
-    results = this.intersector.intersectObjects(objects, true);
-    this.holdTarget = results[0] && results[0].object && results[0].object.el;
-    if (this.holdTarget) {
-      this.holdTarget.emit('leap-holdstart', eventDetail);
-    }
+    this.el.emit('gripdown', this.getEventDetail(hand));
     this.isHolding = true;
   },
 
   release: function (hand) {
-    var eventDetail = this.getEventDetail(hand);
-
-    this.el.emit('leap-holdstop', eventDetail);
-
-    if (this.holdTarget) {
-      this.holdTarget.emit('leap-holdstop', eventDetail);
-      this.holdTarget = null;
-    }
+    this.el.emit('gripup', this.getEventDetail(hand));
     this.isHolding = false;
   },
 
   getEventDetail: function (hand) {
     return {
+      controller: 'leap',
       hand: hand,
       handID: this.handID,
       body: this.handBody ? this.handBody.palmBody : null

@@ -6,52 +6,52 @@
     <title>Examples • Grabbing</title>
     <script src="../budo.js"></script>
     <script>
-AFRAME.registerComponent('holdable', {
-  schema: {activeColor: {default: 'orange'}},
+      AFRAME.registerComponent('leap-attachment', {
+        init: function () {
+          var el = this.el,
+              parentEl = this.el.parentElement;
+          el.body = parentEl.body;
+          parentEl.addEventListener('body-loaded', function () { el.body = parentEl.body; });
+          parentEl.addEventListener('gripup', function (e) { el.emit(e.type, e.detail, false); });
+          parentEl.addEventListener('gripdown', function (e) { el.emit(e.type, e.detail, false); });
+        },
 
-  init: function () {
-    this.physics =    /** @type {AFRAME.System}     */ this.el.sceneEl.systems.physics;
-    this.constraint = /** @type {CANNON.Constraint} */ null;
-    this.handID =     /** @type {number} */            null;
-    this.el.addEventListener('leap-holdstart', this.onHoldStart.bind(this));
-    this.el.addEventListener('leap-holdstop', this.onHoldStop.bind(this));
-  },
+        remove: function () {
+          delete this.el.body;
+        },
 
-  onHoldStart: function (e) {
-    if (this.handID) return;
-
-    this.originalColor = this.el.getAttribute('material').color;
-    this.el.setAttribute('material', 'color', this.data.activeColor);
-    this.constraint = new CANNON.LockConstraint(this.el.body, e.detail.body);
-    this.physics.world.addConstraint(this.constraint);
-    this.handID = e.detail.handID;
-  },
-
-  onHoldStop: function (e) {
-    if (e.detail.handID !== this.handID) return;
-
-    this.el.setAttribute('material', 'color', this.originalColor);
-    this.physics.world.removeConstraint(this.constraint);
-    this.constraint = null;
-    this.handID = null;
-  }
-});
+        tick: function () {
+          var parentEl = this.el.parentElement,
+              leapHand = parentEl.components['leap-hand'];
+          if (!leapHand) return;
+          this.el.setAttribute('position', leapHand.handMesh.fingerMeshes[2][5].position);
+          this.el.setAttribute('quaternion', leapHand.handMesh.fingerMeshes[2][5].quaternion);
+        }
+      });
     </script>
   </head>
   <body>
     <a-scene>
       <!-- Player -->
       <a-entity camera="near: 0.01" position="0 0 0" look-controls>
-        <a-entity leap-hand="hand: left; enablePhysics: true;"></a-entity>
-        <a-entity leap-hand="hand: right; enablePhysics: true;"></a-entity>
+        <a-entity leap-hand="hand: left; enablePhysics: true;">
+          <a-sphere leap-attachment radius="0.1" color="red" opacity="0.1"
+                    sphere-collider="objects: [dynamic-body]; radius: 0.1;"
+                    grab></a-sphere>
+        </a-entity>
+        <a-entity leap-hand="hand: right; enablePhysics: true;">
+          <a-sphere leap-attachment radius="0.1" color="red" opacity="0.1"
+                    sphere-collider="objects: [dynamic-body]; radius: 0.1;"
+                    grab></a-sphere>
+        </a-entity>
       </a-entity>
 
       <a-box width="0.25" height="0.25" depth="0.25" position="-0.125 0.13 -0.5" color="red"
-             holdable dynamic-body="shape: box"></a-box>
-      <a-box width="0.25" height="0.25" depth="0.25" position="0.00 0.4 -0.5" color="green"
-             holdable dynamic-body="shape: box"></a-box>
+             holdable-DIS dynamic-body="shape: box"></a-box>
+      <a-box width="0.25" height="0.25" depth="0.25" position="0.00 0.5 -0.5" color="green"
+             holdable-DIS dynamic-body="shape: box"></a-box>
       <a-box width="0.25" height="0.25" depth="0.25" position="0.125 0.13 -0.5" color="blue"
-             holdable dynamic-body="shape: box"></a-box>
+             holdable-DIS dynamic-body="shape: box"></a-box>
 
       <!-- Terrain -->
       <a-grid static-body></a-grid>
