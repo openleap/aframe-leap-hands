@@ -5,7 +5,8 @@
 
 A-Frame VR component for Leap Motion controller.
 
-![screenshot](https://dl.dropboxusercontent.com/u/42869844/tmp/leaphands.JPG)
+![4d731aec-193d-463c-8189-d54c5e023206-20847-0002ac9dc2db9992](https://cloud.githubusercontent.com/assets/1848368/23005782/0909f4aa-f3cc-11e6-83f3-072b53374000.gif)
+
 
 ## Installation
 
