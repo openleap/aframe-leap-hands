@@ -40,7 +40,7 @@ require('aframe-leap-hands').registerAll();
 
 ## Options
 
-Properties for the `leap-hand` component:
+### `leap-hand` component:
 
 | Property           | Default      | Description |
 |--------------------|--------------|-------------|
@@ -53,7 +53,7 @@ Properties for the `leap-hand` component:
 | releaseSensitivity | 0.75         | 0–1. |
 | debug              | false        | Shows a grip target indicator. |
 
-Properties for the `leap` system:
+### `leap` system:
 
 | Property   | Default   | Description |
 |------------|-----------|-------------|
