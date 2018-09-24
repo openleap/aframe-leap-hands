@@ -14,7 +14,7 @@ In the [dist/](https://github.com/openleap/aframe-leap-hands/tree/master/dist) f
 Or, use a CDN-hosted version:
 
 ```html
-<script src="//unpkg.com/aframe-leap-hands/dist/aframe-leap-hands.min.js"></script>
+<script src="//unpkg.com/aframe-leap-hands/dist/aframe-leap-hands.umd.js"></script>
 ```
 
 ## Installation (NPM)
@@ -26,7 +26,8 @@ npm install --save aframe-leap-hands
 ```
 
 ```javascript
-require('aframe-leap-hands').registerAll();
+require('aframe');
+require('aframe-leap-hands');
 ```
 
 ## Usage
