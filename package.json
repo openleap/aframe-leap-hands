@@ -38,7 +38,8 @@
     "aframe-physics-system": "^3.2.0",
     "browserify": "^14.1.0",
     "budo": "^11.3.2",
-    "webpack": "^4.19.1"
+    "webpack": "^4.19.1",
+    "webpack-cli": "^3.1.1"
   },
   "peerDependencies": {
     "aframe": "^0.8.2"
