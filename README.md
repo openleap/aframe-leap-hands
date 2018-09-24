@@ -1,5 +1,6 @@
 # A-Frame VR `leap-hand` for Leap Motion
 
+[![Latest NPM release](https://img.shields.io/npm/v/aframe-leap-hands.svg)](https://www.npmjs.com/package/aframe-leap-hands)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/donmccurdy/aframe-leap-hands/master/LICENSE)
 ![Work in progress](https://img.shields.io/badge/status-experimental-orange.svg)
 
