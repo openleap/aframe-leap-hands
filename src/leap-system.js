@@ -11,7 +11,7 @@ Leap.Controller.plugin('transform', transform);
 /**
  * Leap Motion system for A-Frame.
  */
-module.exports = {
+AFRAME.registerSystem('leap', {
   schema: {
     vr: {default: true},
     scale: {default: DEFAULT_SCALE},
@@ -42,4 +42,4 @@ module.exports = {
   getFrame: function () {
     return this.controller.frame();
   }
-};
+});

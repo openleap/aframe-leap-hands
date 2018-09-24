@@ -1,5 +1,5 @@
 window.Leap = require('leapjs');
 window.AFRAME = require('aframe');
-require('aframe-extras').registerAll();
-
-require('../').registerAll();
+require('aframe-extras');
+require('aframe-physics-system');
+require('../');

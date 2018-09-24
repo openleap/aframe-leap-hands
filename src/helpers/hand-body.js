@@ -6,14 +6,14 @@ function HandBody (el, handComponent) {
   this.handComponent = handComponent;
   this.system = this.el.sceneEl.systems.leap;
   this.physics = this.el.sceneEl.systems.physics;
-  this.physics.addBehavior(this, this.physics.Phase.SIMULATE);
+  this.physics.addComponent(this);
 
   this.palmBody = /** @type {CANNON.Body} */ null;
   this.fingerBodies = /** @type {{string: CANNON.Body}} */ {};
 }
 
 HandBody.prototype.remove = function () {
-  this.system.removeBehavior(this, this.physics.Phase.SIMULATE);
+  this.system.removeComponent(this);
   for (var id in this.fingerBodies) {
     if (this.fingerBodies.hasOwnProperty(id)) {
       this.physics.removeBody(this.fingerBodies[id]);
@@ -21,7 +21,7 @@ HandBody.prototype.remove = function () {
   }
 };
 
-HandBody.prototype.step = function () {
+HandBody.prototype.beforeStep = function () {
   var finger, fingerBody,
       hand = this.handComponent.getHand();
 

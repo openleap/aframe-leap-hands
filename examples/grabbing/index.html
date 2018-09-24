@@ -23,7 +23,7 @@ AFRAME.registerComponent('holdable', {
     this.originalColor = this.el.getAttribute('material').color;
     this.el.setAttribute('material', 'color', this.data.activeColor);
     this.constraint = new CANNON.LockConstraint(this.el.body, e.detail.body);
-    this.physics.world.addConstraint(this.constraint);
+    this.physics.addConstraint(this.constraint);
     this.handID = e.detail.handID;
   },
 
@@ -31,7 +31,7 @@ AFRAME.registerComponent('holdable', {
     if (e.detail.handID !== this.handID) return;
 
     this.el.setAttribute('material', 'color', this.originalColor);
-    this.physics.world.removeConstraint(this.constraint);
+    this.physics.removeConstraint(this.constraint);
     this.constraint = null;
     this.handID = null;
   }
@@ -41,7 +41,7 @@ AFRAME.registerComponent('holdable', {
   <body>
     <a-scene>
       <!-- Player -->
-      <a-entity camera="near: 0.01" position="0 0 0" look-controls>
+      <a-entity camera="near: 0.01" look-controls>
         <a-entity leap-hand="hand: left; enablePhysics: true;"></a-entity>
         <a-entity leap-hand="hand: right; enablePhysics: true;"></a-entity>
       </a-entity>

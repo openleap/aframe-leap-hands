@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "budo examples/index.js:examples/budo.js --port 8000",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dist": "webpack browser.js dist/aframe-leap-hands.js && webpack -p browser.js dist/aframe-leap-hands.min.js",
+    "dist": "webpack index.js dist/aframe-leap-hands.js && webpack -p index.js dist/aframe-leap-hands.min.js",
     "version": "npm run dist && git add -A dist",
     "postversion": "git push && git push --tags && npm publish"
   },
@@ -33,13 +33,14 @@
     "leapjs": "^0.6.4"
   },
   "devDependencies": {
-    "aframe": "^0.7.1",
-    "aframe-extras": "^3.13.1",
+    "aframe": "^0.8.2",
+    "aframe-extras": "^4.2.0",
+    "aframe-physics-system": "^3.2.0",
     "browserify": "^14.1.0",
-    "budo": "^9.4.7",
-    "webpack": "^2.2.1"
+    "budo": "^11.3.2",
+    "webpack": "^4.19.1"
   },
   "peerDependencies": {
-    "aframe": "^0.7.1"
+    "aframe": "^0.8.2"
   }
 }
