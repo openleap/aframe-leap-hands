@@ -2,11 +2,13 @@
   "name": "aframe-leap-hands",
   "version": "0.7.2",
   "description": "Leap Motion components for A-Frame VR",
-  "main": "index.js",
+  "source": "src/index.js",
+  "main": "dist/aframe-leap-hands.js",
+  "module": "dist/aframe-leap-hands.module.js",
   "scripts": {
-    "dev": "budo examples/index.js:examples/budo.js --port 8000",
+    "dev": "concurrently \"microbundle watch --target browser\" \"serve --listen 5000\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dist": "webpack index.js dist/aframe-leap-hands.js && webpack -p index.js dist/aframe-leap-hands.min.js",
+    "dist": "microbundle --target browser",
     "version": "npm run dist && git add -A dist",
     "postversion": "git push && git push --tags && npm publish"
   },
@@ -29,17 +31,16 @@
   },
   "homepage": "https://github.com/donmccurdy/aframe-leap-hands#readme",
   "dependencies": {
-    "circular-array": "0.0.1",
-    "leapjs": "^0.6.4"
+    "circular-array": "^0.1.1"
   },
   "devDependencies": {
     "aframe": "^0.8.2",
     "aframe-extras": "^4.2.0",
     "aframe-physics-system": "^3.2.0",
-    "browserify": "^14.1.0",
-    "budo": "^11.3.2",
-    "webpack": "^4.19.1",
-    "webpack-cli": "^3.1.1"
+    "concurrently": "^4.0.1",
+    "leapjs": "^0.6.4",
+    "microbundle": "^0.6.0",
+    "serve": "^10.0.1"
   },
   "peerDependencies": {
     "aframe": "^0.8.2"

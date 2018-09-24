@@ -97,4 +97,4 @@ HandBody.prototype.syncPalmBody = (function () {
   };
 }());
 
-module.exports = HandBody;
+export { HandBody };

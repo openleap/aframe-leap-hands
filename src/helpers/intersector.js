@@ -65,4 +65,4 @@ Intersector.prototype.hide = function () {
   return this;
 };
 
-module.exports = Intersector;
+export { Intersector };

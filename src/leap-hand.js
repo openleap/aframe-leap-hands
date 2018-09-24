@@ -1,14 +1,14 @@
-var HandMesh = require('../lib/leap.hand-mesh'),
-    CircularArray = require('circular-array'),
-    Intersector = require('./helpers/intersector'),
-    HandBody = require('./helpers/hand-body');
+import { HandMesh } from '../lib/leap.hand-mesh';
+import { HandBody } from './helpers/hand-body';
+import { Intersector } from './helpers/intersector';
+import { CircularArray } from 'circular-array';
 
 var nextID = 1;
 
 /**
  * A-Frame component for a single Leap Motion hand.
  */
-AFRAME.registerComponent('leap-hand', {
+const Component = AFRAME.registerComponent('leap-hand', {
   schema: {
     hand:               {default: '', oneOf: ['left', 'right'], required: true},
     enablePhysics:      {default: false},
@@ -155,3 +155,5 @@ function circularArrayAvg (array) {
   }
   return avg / array.length;
 }
+
+export { Component };

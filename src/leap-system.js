@@ -1,5 +1,5 @@
-var Leap = require('leapjs'),
-    transform = require('../lib/leap.transform.js');
+import { Leap } from '../lib/leap';
+import { transform } from '../lib/leap.transform.js';
 
 // Defaults from leap.transform.js.
 var DEFAULT_SCALE = 0.001;
@@ -11,7 +11,7 @@ Leap.Controller.plugin('transform', transform);
 /**
  * Leap Motion system for A-Frame.
  */
-AFRAME.registerSystem('leap', {
+export const System = AFRAME.registerSystem('leap', {
   schema: {
     vr: {default: true},
     scale: {default: DEFAULT_SCALE},
