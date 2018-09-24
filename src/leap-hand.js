@@ -1,7 +1,7 @@
 import { HandMesh } from '../lib/leap.hand-mesh';
 import { HandBody } from './helpers/hand-body';
 import { Intersector } from './helpers/intersector';
-import { CircularArray } from 'circular-array';
+import { CircularArray } from '../lib/circular-array';
 
 var nextID = 1;
 
