@@ -38,7 +38,6 @@
     "aframe-extras": "^4.2.0",
     "aframe-physics-system": "^3.2.0",
     "concurrently": "^4.0.1",
-    "leapjs": "^0.6.4",
     "microbundle": "^0.6.0",
     "serve": "^10.0.1"
   },
